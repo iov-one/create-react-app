@@ -59,9 +59,14 @@ const cssModuleRegex = /\.module\.css$/;
 const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
 
-// This is the production and development configuration.
-// It is focused on developer experience, fast rebuilds, and a minimal bundle.
-module.exports = function(webpackEnv) {
+// chrome-extension-react-scripts START
+/* This is the production and development configuration.
+ * It is focused on developer experience, fast rebuilds, and a minimal bundle.
+ * It contains a the contentScript and backgroundScript paths for compiling them
+ * under the same tree, allowing to share dependencies between them.
+ */
+// chrome-extension-react-scripts END
+module.exports = function(webpackEnv, contentScript, backgroundScript) {
   const isEnvDevelopment = webpackEnv === 'development';
   const isEnvProduction = webpackEnv === 'production';
 
@@ -157,44 +162,29 @@ module.exports = function(webpackEnv) {
       : isEnvDevelopment && 'cheap-module-source-map',
     // These are the "entry points" to our application.
     // This means they will be the "root" imports that are included in JS bundle.
-    entry: [
-      // Include an alternative client for WebpackDevServer. A client's job is to
-      // connect to WebpackDevServer by a socket and get notified about changes.
-      // When you save a file, the client will either apply hot updates (in case
-      // of CSS changes), or refresh the page (in case of JS changes). When you
-      // make a syntax error, this client will display a syntax error overlay.
-      // Note: instead of the default WebpackDevServer client, we use a custom one
-      // to bring better experience for Create React App users. You can replace
-      // the line below with these two lines if you prefer the stock client:
-      // require.resolve('webpack-dev-server/client') + '?/',
-      // require.resolve('webpack/hot/dev-server'),
-      isEnvDevelopment &&
-        require.resolve('react-dev-utils/webpackHotDevClient'),
-      // Finally, this is your app's code:
-      paths.appIndexJs,
-      // We include the app code last so that if there is a runtime error during
-      // initialization, it doesn't blow up the WebpackDevServer client, and
-      // changing JS code would still trigger a refresh.
-    ].filter(Boolean),
+    entry: {
+      // chrome-extension-react-scripts START
+      main: [
+        isEnvDevelopment
+          ? 'webpack-dev-server/client?http://localhost:3000'
+          : undefined,
+        isEnvDevelopment ? 'webpack/hot/dev-server' : undefined,
+        paths.appIndexJs,
+      ].filter(Boolean),
+      contentScript: `${process.cwd()}/${contentScript}`,
+      backgroundScript: `${process.cwd()}/${backgroundScript}`,
+      // chrome-extension-react-scripts END
+    },
     output: {
+      // chrome-extension-react-scripts START
       // The build folder.
-      path: isEnvProduction ? paths.appBuild : undefined,
+      path: paths.appBuild,
       // Add /* filename */ comments to generated require()s in the output.
       pathinfo: isEnvDevelopment,
-      // There will be one main bundle, and one file per asynchronous chunk.
-      // In development, it does not produce real files.
-      filename: isEnvProduction
-        ? 'static/js/[name].[contenthash:8].js'
-        : isEnvDevelopment && 'static/js/bundle.js',
-      // TODO: remove this when upgrading to webpack 5
-      futureEmitAssets: true,
-      // There are also additional JS chunk files if you use code splitting.
-      chunkFilename: isEnvProduction
-        ? 'static/js/[name].[contenthash:8].chunk.js'
-        : isEnvDevelopment && 'static/js/[name].chunk.js',
-      // We inferred the "public path" (such as / or /my-project) from homepage.
-      // We use "/" in development.
-      publicPath: publicPath,
+      filename: 'js/[name].js',
+      chunkFilename: 'js/[name].chunk.js',
+      publicPath: publicPath || '',
+      // chrome-extension-react-scripts END
       // Point sourcemap entries to original disk location (format as URL on Windows)
       devtoolModuleFilenameTemplate: isEnvProduction
         ? info =>
@@ -275,15 +265,15 @@ module.exports = function(webpackEnv) {
       // https://twitter.com/wSokra/status/969633336732905474
       // https://medium.com/webpack/webpack-4-code-splitting-chunk-graph-and-the-splitchunks-optimization-be739a861366
       splitChunks: {
-        chunks: 'all',
-        name: false,
+        // chrome-extension-react-scripts START
+        cacheGroups: {
+          default: false,
+        },
+        // chrome-extension-react-scripts END
       },
-      // Keep the runtime chunk separated to enable long term caching
-      // https://twitter.com/wSokra/status/969679223278505985
-      // https://github.com/facebook/create-react-app/issues/5358
-      runtimeChunk: {
-        name: entrypoint => `runtime-${entrypoint.name}`,
-      },
+      // chrome-extension-react-scripts START
+      runtimeChunk: false,
+      // chrome-extension-react-scripts END
     },
     resolve: {
       // This allows you to set a fallback for where Webpack should look for modules.
@@ -584,6 +574,10 @@ module.exports = function(webpackEnv) {
           {
             inject: true,
             template: paths.appHtml,
+            // chrome-extension-react-scripts START
+            filename: 'index.html',
+            chunks: ['main'],
+            // chrome-extension-react-scripts END
           },
           isEnvProduction
             ? {

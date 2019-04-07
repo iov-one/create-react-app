@@ -325,6 +325,15 @@ module.exports = function(
   }
   console.log();
   console.log('Happy hacking!');
+  // chrome-extension-react-scripts start
+  console.log();
+  console.log(
+    chalk.yellow(
+      'You are using the scripts version for developing chrome extension using react'
+    )
+  );
+  console.log('Enjoy!');
+  // chrome-extension-react-scripts end
 };
 
 function isReactInstalled(appPackage) {
