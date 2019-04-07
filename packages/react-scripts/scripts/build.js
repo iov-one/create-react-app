@@ -59,8 +59,22 @@ if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
   process.exit(1);
 }
 
+// chrome-extension-react-scripts START
+const contentScript = process.argv[2];
+const backgroundScript = process.argv[3];
+if (!contentScript || !backgroundScript) {
+  console.log(
+    chalk.red(
+      `You need to specify as first argument the contentScript route, and as second argument the background script route`
+    )
+  );
+  process.exit(1);
+}
+// chrome-extension-react-scripts END
 // Generate configuration
-const config = configFactory('production');
+// chrome-extension-react-scripts START
+const config = configFactory('production', contentScript, backgroundScript);
+// chrome-extension-react-scripts END
 
 // We require that you explicitly set browsers and do not fall back to
 // browserslist defaults.
