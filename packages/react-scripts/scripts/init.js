@@ -256,7 +256,7 @@ module.exports = function(
   }
   console.log();
   console.log('Happy hacking!');
-  // chrome-extension-react-scripts start
+  // @iov/browser-extension-react-scripts start
   console.log();
   console.log(
     chalk.yellow(
@@ -264,7 +264,7 @@ module.exports = function(
     )
   );
   console.log('Enjoy!');
-  // chrome-extension-react-scripts end
+  // @iov/browser-extension-react-scripts end
 };
 
 function isReactInstalled(appPackage) {
