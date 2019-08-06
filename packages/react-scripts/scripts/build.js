@@ -59,7 +59,7 @@ if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
   process.exit(1);
 }
 
-// chrome-extension-react-scripts START
+// @iov/browser-extension-react-scripts START
 const contentScript = process.argv[2];
 const backgroundScript = process.argv[3];
 if (!contentScript || !backgroundScript) {
@@ -70,11 +70,11 @@ if (!contentScript || !backgroundScript) {
   );
   process.exit(1);
 }
-// chrome-extension-react-scripts END
+// @iov/browser-extension-react-scripts END
 // Generate configuration
-// chrome-extension-react-scripts START
+// @iov/browser-extension-react-scripts START
 const config = configFactory('production', contentScript, backgroundScript);
-// chrome-extension-react-scripts END
+// @iov/browser-extension-react-scripts END
 
 // We require that you explicitly set browsers and do not fall back to
 // browserslist defaults.

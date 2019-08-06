@@ -1,5 +1,5 @@
 {
-  "name": "chrome-extension-react-scripts",
+  "name": "@iov/browser-extension-react-scripts",
   "version": "3.3.0",
   "description": "(3.3.0) Chrome extension configuration for Create React App.",
   "repository": {
