@@ -257,7 +257,7 @@ function verifyTypeScriptSetup() {
   if (!fs.existsSync(paths.appTypeDeclarations)) {
     fs.writeFileSync(
       paths.appTypeDeclarations,
-      `/// <reference types="chrome-extension-react-scripts" />${os.EOL}`
+      `/// <reference types="@iov/browser-extension-react-scripts" />${os.EOL}`
     );
   }
 }

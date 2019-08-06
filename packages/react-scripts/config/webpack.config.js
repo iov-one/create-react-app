@@ -53,13 +53,13 @@ const cssModuleRegex = /\.module\.css$/;
 const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
 
-// chrome-extension-react-scripts START
+// @iov/browser-extension-react-scripts START
 /* This is the production and development configuration.
  * It is focused on developer experience, fast rebuilds, and a minimal bundle.
  * It contains a the contentScript and backgroundScript paths for compiling them
  * under the same tree, allowing to share dependencies between them.
  */
-// chrome-extension-react-scripts END
+// @iov/browser-extension-react-scripts END
 module.exports = function(webpackEnv, contentScript, backgroundScript) {
   const isEnvDevelopment = webpackEnv === 'development';
   const isEnvProduction = webpackEnv === 'production';
@@ -144,7 +144,7 @@ module.exports = function(webpackEnv, contentScript, backgroundScript) {
     // These are the "entry points" to our application.
     // This means they will be the "root" imports that are included in JS bundle.
     entry: {
-      // chrome-extension-react-scripts START
+      // @iov/browser-extension-react-scripts START
       main: [
         isEnvDevelopment
           ? 'webpack-dev-server/client?http://localhost:3000'
@@ -154,10 +154,10 @@ module.exports = function(webpackEnv, contentScript, backgroundScript) {
       ].filter(Boolean),
       contentScript: `${process.cwd()}/${contentScript}`,
       backgroundScript: `${process.cwd()}/${backgroundScript}`,
-      // chrome-extension-react-scripts END
+      // @iov/browser-extension-react-scripts END
     },
     output: {
-      // chrome-extension-react-scripts START
+      // @iov/browser-extension-react-scripts START
       // The build folder.
       path: paths.appBuild,
       // Add /* filename */ comments to generated require()s in the output.
@@ -165,7 +165,7 @@ module.exports = function(webpackEnv, contentScript, backgroundScript) {
       filename: 'js/[name].js',
       chunkFilename: 'js/[name].chunk.js',
       publicPath: publicPath || '',
-      // chrome-extension-react-scripts END
+      // @iov/browser-extension-react-scripts END
       // Point sourcemap entries to original disk location (format as URL on Windows)
       devtoolModuleFilenameTemplate: isEnvProduction
         ? info =>
@@ -244,15 +244,15 @@ module.exports = function(webpackEnv, contentScript, backgroundScript) {
       // https://twitter.com/wSokra/status/969633336732905474
       // https://medium.com/webpack/webpack-4-code-splitting-chunk-graph-and-the-splitchunks-optimization-be739a861366
       splitChunks: {
-        // chrome-extension-react-scripts START
+        // @iov/browser-extension-react-scripts START
         cacheGroups: {
           default: false,
         },
-        // chrome-extension-react-scripts END
+        // @iov/browser-extension-react-scripts END
       },
-      // chrome-extension-react-scripts START
+      // @iov/browser-extension-react-scripts START
       runtimeChunk: false,
-      // chrome-extension-react-scripts END
+      // @iov/browser-extension-react-scripts END
     },
     resolve: {
       // This allows you to set a fallback for where Webpack should look for modules.
@@ -523,10 +523,10 @@ module.exports = function(webpackEnv, contentScript, backgroundScript) {
           {
             inject: true,
             template: paths.appHtml,
-            // chrome-extension-react-scripts START
+            // @iov/browser-extension-react-scripts START
             filename: 'index.html',
             chunks: ['main'],
-            // chrome-extension-react-scripts END
+            // @iov/browser-extension-react-scripts END
           },
           isEnvProduction
             ? {
